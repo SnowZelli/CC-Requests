@@ -1,11 +1,11 @@
 // Foursquare API Info
-const clientId = '';
-const clientSecret = '';
-const url = '';
+const clientId = 'B0QUMJJQEUXLPHQ0MIQKJ5TZWYJQCD2YZ32BLFOTVTBHLHWR';
+const clientSecret = '4AEMBYUIFDB0CN1EEDDTKFQOYD5N40AF1AIATAD5BLQ1N4GY';
+const url = 'https://api.foursquare.com/v2/venues/explore?near=';
 
 // APIXU Info
-const apiKey = '';
-const forecastUrl = '';
+const apiKey = 'af1801df4dbc4e0ba95214443190907';
+const forecastUrl = 'https://api.apixu.com/v1/forecast.json?key=';
 
 // Page Elements
 const $input = $('#city');
@@ -17,11 +17,18 @@ const $weatherDivs = [$("#weather1"), $("#weather2"), $("#weather3"), $("#weathe
 const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // Add AJAX functions here:
-const getVenues = () => {
+const getVenues = async () => {
+    const city = $input.val();
+    const urlToFetch = `${url}${city}&limit=10&client_id=${clientId}&client_secret=${clientSecret}&v=20190710`;
+    try {
 
+    }
+    catch(error) {
+        console.log(error);
+    }
 }
 
-const getForecast = () => {
+const getForecast = async () => {
 
 }
 
