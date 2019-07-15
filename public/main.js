@@ -2,6 +2,7 @@
 const clientId = 'B0QUMJJQEUXLPHQ0MIQKJ5TZWYJQCD2YZ32BLFOTVTBHLHWR';
 const clientSecret = '4AEMBYUIFDB0CN1EEDDTKFQOYD5N40AF1AIATAD5BLQ1N4GY';
 const url = 'https://api.foursquare.com/v2/venues/explore?near=';
+const venueURL = 'https://api.foursquare.com/v2/venues/';
 
 // APIXU Info
 const apiKey = 'af1801df4dbc4e0ba95214443190907';
@@ -35,6 +36,25 @@ const getVenues = async () => {
     }
 }
 
+const getVenuePhotos = async (venueID) => {
+  const urlToFetch = `${venueURL}${venueID}/photos?&client_id=${clientId}&client_secret=${clientSecret}&v=20190710`;
+  try {
+    const response = await fetch(urlToFetch);
+    //console.log(response);
+    if(response.ok) {
+      const jsonResponse = await response.json();
+      const prefix = jsonResponse.response.photos.items[0].prefix;
+      const suffix = jsonResponse.response.photos.items[0].suffix;
+      const venuePhotos = `${prefix}200x200${suffix}`;
+      //console.log(venuePhotos);
+      return venuePhotos;
+    }
+  }
+  catch(error) {
+    console.log(error);
+  }
+}
+
 const getForecast = async () => {
   const urlToFetch = `${forecastUrl}${apiKey}&q=${$input.val()}&days=4&hour=11`;
   try {
@@ -54,12 +74,11 @@ const getForecast = async () => {
 
 // Render functions
 const renderVenues = (venues) => {
-  $venueDivs.forEach(($venue) => {
+  $venueDivs.forEach(async ($venue) => {
     let randomNumber = Math.floor(Math.random() * 100);
     const venue = venues[randomNumber];
-    const venueIcon = venue.categories[0].icon;
-    const venueImgSrc = `${venueIcon.prefix}bg_64${venueIcon.suffix}`;
-    let venueContent = createVenueHTML(venue.name, venue.location, venue.location.state, venue.location.postalCode, venueImgSrc);
+    let venuePhotos = await getVenuePhotos(venue.id);
+    let venueContent = createVenueHTML(venue.name, venue.location, venue.location.state, venue.location.postalCode, venuePhotos);
     $venue.append(venueContent);
   });
   $destination.append(`<h2>${venues[0].location.city}</h2>`);
@@ -89,4 +108,4 @@ const executeSearch = () => {
   return false;
 }
 
-$submit.click(executeSearch)
+$submit.click(executeSearch);
